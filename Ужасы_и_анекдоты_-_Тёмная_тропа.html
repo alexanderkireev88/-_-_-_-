@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тёмная тропа — Ужасы, Чёрный Юмор и Анекдоты</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        blood: {
+                            500: '#dc2626',
+                            600: '#b91c1c',
+                            700: '#991b1b',
+                            800: '#7f1d1d',
+                            900: '#450a0a',
+                        },
+                        dark: {
+                            900: '#090a0f',
+                            800: '#11131c',
+                            700: '#1a1d2b',
+                            600: '#262a3d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Rubik', 'sans-serif'],
+                        horror: ['Creepster', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #090a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .horror-font {
+            font-family: 'Creepster', cursive;
+            letter-spacing: 2px;
+        }
+
+        /* Ambient Glow & Shadow Effects */
+        .blood-glow {
+            box-shadow: 0 0 25px rgba(220, 38, 38, 0.35);
+        }
+
+        .blood-glow-lg {
+            box-shadow: 0 0 50px rgba(220, 38, 38, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7f1d1d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
+
+        /* Creepy Animated Fog / Smoke Overlay */
+        .fog-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.15;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .fog-img {
+            position: absolute;
+            height: 100%;
+            width: 300%;
+            background: url('https://raw.githubusercontent.com/danielmwi/fog-effect/master/fog-1.png') repeat-x;
+            background-size: contain;
+            animation: fogAnim 40s linear infinite;
+        }
+
+        @keyframes fogAnim {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-1000px, 0, 0); }
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.7), 0 0 20px rgba(185, 28, 28, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-200 min-h-screen flex flex-col justify-between selection:bg-blood-700 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-dark-900/90 backdrop-blur-md border-b border-blood-900/50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#hero" class="flex items-center space-x-3 group">
+                    <div class="w-12 h-12 rounded-full bg-blood-900/80 border border-blood-600 flex items-center justify-center text-blood-500 group-hover:scale-110 transition-transform blood-glow">
+                        <i class="fa-solid fa-skull text-2xl text-red-500 group-hover:animate-pulse"></i>
+                    </div>
+                    <div>
+                        <span class="horror-font text-2xl text-red-600 tracking-wider text-glow block leading-none">ТЁМНАЯ ТРОПА</span>
+                        <span class="text-xs text-gray-400 font-medium tracking-widest uppercase">Ужасы & Чёрный юмор</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#hero" class="hover:text-red-500 transition-colors py-2"><i class="fa-solid fa-house mr-1 text-xs"></i> Главная</a>
+                    <a href="#catalog" class="hover:text-red-500 transition-colors py-2"><i class="fa-solid fa-book-dead mr-1 text-xs"></i> Истории & Анекдоты</a>
+                    <a href="#audio-player" class="hover:text-red-500 transition-colors py-2"><i class="fa-solid fa-headphones mr-1 text-xs"></i> Аудио</a>
+                    <a href="#about" class="hover:text-red-500 transition-colors py-2"><i class="fa-solid fa-ghost mr-1 text-xs"></i> О проекте</a>
+                    <a href="#submit-story" class="hover:text-red-500 transition-colors py-2"><i class="fa-solid fa-pen-nib mr-1 text-xs"></i> Прислать историю</a>
+                    <a href="#contact" class="hover:text-red-500 transition-colors py-2"><i class="fa-solid fa-heart mr-1 text-xs text-red-500"></i> Поддержать</a>
+                </nav>
+
+                <!-- Ambient Sound Control & Mobile Menu Toggle -->
+                <div class="flex items-center space-x-3">
+                    <button id="ambientToggle" class="px-3 py-2 rounded-lg bg-dark-800 border border-dark-600 hover:border-red-600 text-xs flex items-center space-x-2 transition-all">
+                        <i id="ambientIcon" class="fa-solid fa-volume-xmark text-gray-400"></i>
+                        <span id="ambientStatus" class="hidden sm:inline text-gray-300">Фоновый гул</span>
+                    </button>
+
+                    <!-- Mobile burger button -->
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg bg-dark-800 text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobileMenu" class="hidden md:hidden bg-dark-800 border-b border-blood-900/60 px-4 pt-2 pb-4 space-y-2">
+            <a href="#hero" class="block py-2 text-gray-300 hover:text-red-500"><i class="fa-solid fa-house w-6"></i> Главная</a>
+            <a href="#catalog" class="block py-2 text-gray-300 hover:text-red-500"><i class="fa-solid fa-book-dead w-6"></i> Истории & Анекдоты</a>
+            <a href="#audio-player" class="block py-2 text-gray-300 hover:text-red-500"><i class="fa-solid fa-headphones w-6"></i> Аудиорассказы</a>
+            <a href="#about" class="block py-2 text-gray-300 hover:text-red-500"><i class="fa-solid fa-ghost w-6"></i> О проекте</a>
+            <a href="#submit-story" class="block py-2 text-gray-300 hover:text-red-500"><i class="fa-solid fa-pen-nib w-6"></i> Прислать историю</a>
+            <a href="#contact" class="block py-2 text-gray-300 hover:text-red-500"><i class="fa-solid fa-heart w-6 text-red-500"></i> Поддержать</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-dark-900 via-dark-800 to-dark-900 border-b border-dark-700">
+        <div class="fog-container"><div class="fog-img"></div></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blood-900/40 border border-blood-600/60 text-red-400 text-xs sm:text-sm font-medium mb-6">
+                <i class="fa-solid fa-fire text-red-500 animate-bounce"></i>
+                <span>Портал авторских ужасов и тёмного юмора</span>
+            </div>
+
+            <h1 class="horror-font text-5xl sm:text-7xl lg:text-8xl text-red-600 tracking-wide text-glow mb-6">
+                ТЁМНАЯ ТРОПА
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-300 font-light leading-relaxed mb-10">
+                Заходи, не бойся... Но помни: здесь самые пугающие легенды переплетаются с самым чёрным юмором. Читай страшилки, слушай аудиорассказы и смейся на грани кошмара.
+            </p>
+
+            <!-- Interactive Daily Joke / Creepy Quote Widget -->
+            <div class="max-w-2xl mx-auto bg-dark-800/80 border border-blood-900/80 rounded-2xl p-6 shadow-2xl relative backdrop-blur-sm mb-10 blood-glow">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs uppercase tracking-wider font-semibold text-red-500 flex items-center">
+                        <i class="fa-solid fa-dice-d20 mr-2 text-red-500"></i> Случайная доза ужаса
+                    </span>
+                    <button id="nextJokeBtn" class="text-xs text-gray-400 hover:text-white flex items-center bg-dark-700 hover:bg-blood-800 px-3 py-1 rounded-md transition-all">
+                        <i class="fa-solid fa-rotate mr-1"></i> Другой анекдот
+                    </button>
+                </div>
+                <blockquote id="dailyJokeText" class="text-gray-200 italic text-base sm:text-lg min-h-[70px] flex items-center justify-center px-4">
+                    «— Дорогой, под кроватью кто-то есть! — Не переживай, дорогая, мы с ним на полупопии уже поделили территорию...»
+                </blockquote>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="#catalog" class="px-8 py-4 rounded-xl bg-blood-700 hover:bg-blood-600 text-white font-semibold transition-all shadow-lg hover:shadow-red-600/30 hover:-translate-y-0.5 flex items-center">
+                    <i class="fa-solid fa-book-open mr-2"></i> Читать истории
+                </a>
+                <a href="#audio-player" class="px-8 py-4 rounded-xl bg-dark-700 hover:bg-dark-600 border border-dark-600 text-gray-200 font-semibold transition-all hover:-translate-y-0.5 flex items-center">
+                    <i class="fa-solid fa-circle-play mr-2 text-red-500"></i> Слушать аудио
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Catalog Section -->
+    <section id="catalog" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+            <div>
+                <h2 class="horror-font text-4xl text-red-600 text-glow mb-2">Архив Мрака</h2>
+                <p class="text-gray-400 text-sm">Выбирай контент по вкусу: страшные байки, чёрные анекдоты и крипипаста</p>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <div class="relative flex-grow">
+                    <input type="text" id="searchInput" placeholder="Поиск по названию или тексту..." 
+                           class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-dark-800 border border-dark-600 focus:border-red-600 text-sm text-gray-200 focus:outline-none transition-colors">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="flex flex-wrap gap-2 mb-8">
+            <button class="filter-btn active-filter px-4 py-2 rounded-lg text-xs font-medium bg-blood-800 text-white transition-all border border-blood-600" data-category="all">
+                Все материалы
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-lg text-xs font-medium bg-dark-800 text-gray-400 hover:text-white hover:bg-dark-700 border border-dark-600 transition-all" data-category="horror">
+                <i class="fa-solid fa-ghost text-red-500 mr-1"></i> Ужасы & Крипи
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-lg text-xs font-medium bg-dark-800 text-gray-400 hover:text-white hover:bg-dark-700 border border-dark-600 transition-all" data-category="jokes">
+                <i class="fa-solid fa-masks-theater text-yellow-500 mr-1"></i> Чёрный юмор
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-lg text-xs font-medium bg-dark-800 text-gray-400 hover:text-white hover:bg-dark-700 border border-dark-600 transition-all" data-category="audio">
+                <i class="fa-solid fa-headphones text-blue-400 mr-1"></i> Аудиофайлы
+            </button>
+            <button class="filter-btn px-4 py-2 rounded-lg text-xs font-medium bg-dark-800 text-gray-400 hover:text-white hover:bg-dark-700 border border-dark-600 transition-all" data-category="favs">
+                <i class="fa-solid fa-star text-amber-400 mr-1"></i> Избранное (<span id="favCount">0</span>)
+            </button>
+        </div>
+
+        <!-- Grid Cards Container -->
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards populated via JS -->
+        </div>
+    </section>
+
+    <!-- Custom Audio Player Section -->
+    <section id="audio-player" class="py-16 bg-dark-800/60 border-y border-dark-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="horror-font text-4xl text-red-600 text-glow mb-2">Аудиохиты «Тёмной Тропы»</h2>
+                <p class="text-gray-400 text-sm">Слушай озвученные истории с мрачной атмосферной музыкой</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto bg-dark-900 border border-blood-900/60 rounded-2xl p-6 sm:p-8 shadow-2xl relative blood-glow">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <!-- Album Cover / Icon -->
+                    <div class="flex flex-col items-center justify-center p-6 bg-dark-800 rounded-xl border border-dark-700 text-center">
+                        <div class="w-24 h-24 rounded-full bg-blood-900/50 border-2 border-blood-600 flex items-center justify-center mb-4 text-blood-500 animate-pulse">
+                            <i id="playerDiscIcon" class="fa-solid fa-compact-disc text-5xl"></i>
+                        </div>
+                        <span id="playerBadge" class="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded bg-blood-900 text-red-300 mb-1">Аудиорассказ</span>
+                        <h4 id="playerTrackTitle" class="font-bold text-gray-200 text-sm">Ночной попутчик</h4>
+                        <p id="playerTrackAuthor" class="text-xs text-gray-400">Тёмная Тропа Prod.</p>
+                    </div>
+
+                    <!-- Player Controls & Playlist -->
+                    <div class="md:col-span-2 flex flex-col justify-between space-y-4">
+                        <!-- Playlist selection -->
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase font-semibold mb-2 block">Выберите трек:</label>
+                            <select id="trackSelect" class="w-full bg-dark-800 border border-dark-600 text-gray-200 text-sm rounded-lg p-2.5 focus:border-red-600 focus:outline-none">
+                                <option value="0">1. Ночной попутчик на трассе М-4 (04:12)</option>
+                                <option value="1">2. Старая кукла на чердаке бабушки (03:45)</option>
+                                <option value="2">3. Сборник чёрного юмора №13 (05:20)</option>
+                                <option value="3">4. Звонок из прошлого (06:10)</option>
+                            </select>
+                        </div>
+
+                        <!-- Progress Bar Simulation -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs text-gray-400">
+                                <span id="currentTime">00:00</span>
+                                <span id="totalTime">04:12</span>
+                            </div>
+                            <input type="range" id="progressBar" min="0" max="100" value="0" class="w-full accent-red-600 bg-dark-700 h-1.5 rounded-lg cursor-pointer">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <button id="prevTrackBtn" class="p-2 text-gray-400 hover:text-white"><i class="fa-solid fa-backward-step text-lg"></i></button>
+                                <button id="playPauseBtn" class="w-12 h-12 rounded-full bg-blood-600 hover:bg-blood-500 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105">
+                                    <i id="playIcon" class="fa-solid fa-play text-lg ml-0.5"></i>
+                                </button>
+                                <button id="nextTrackBtn" class="p-2 text-gray-400 hover:text-white"><i class="fa-solid fa-forward-step text-lg"></i></button>
+                            </div>
+
+                            <!-- Volume control -->
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-volume-high text-gray-400 text-xs"></i>
+                                <input type="range" id="volumeBar" min="0" max="100" value="80" class="w-20 accent-red-600 bg-dark-700 h-1 rounded-lg cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About & Ecosystem Section -->
+    <section id="about" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Left Info -->
+            <div class="space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-red-500">О проекте</span>
+                <h2 class="horror-font text-4xl sm:text-5xl text-red-600 text-glow">Что такое «Тёмная Тропа»?</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    «Тёмная тропа» — это не просто сборник страшных историй. Это творческое объединение любителей мистики, авторских крипипаст, городских легенд и острых анекдотов. 
+                </p>
+                <p class="text-gray-400 leading-relaxed text-sm">
+                    Мы создаём атмосфеное пространство для тех, кто любит пощекотать нервы перед сном, а затем улыбнуться абсурдности бытия. Наш проект развивается на множестве площадок, объединяя тысячи читателей и слушателей.
+                </p>
+
+                <!-- Official Email Banner -->
+                <div class="p-4 rounded-xl bg-dark-800 border border-blood-900/60 flex items-center space-x-4">
+                    <div class="p-3 bg-blood-900/50 rounded-lg text-red-400">
+                        <i class="fa-solid fa-envelope text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 block">Официальный контакт и предложка:</span>
+                        <a href="mailto:dark.trail@mail.ru" class="text-red-400 font-semibold hover:underline text-lg">dark.trail@mail.ru</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links Grid -->
+            <div class="bg-dark-800/50 p-6 sm:p-8 rounded-2xl border border-dark-700">
+                <h3 class="font-bold text-xl text-gray-200 mb-6 flex items-center">
+                    <i class="fa-solid fa-share-nodes text-red-500 mr-2"></i> Сообщество и Соцсети
+                </h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="https://vk.com" target="_blank" class="p-4 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-blue-500 transition-all flex items-center space-x-3 group">
+                        <i class="fa-brands fa-vk text-2xl text-blue-500 group-hover:scale-110 transition-transform"></i>
+                        <div>
+                            <div class="font-semibold text-sm text-gray-200">ВКонтакте</div>
+                            <div class="text-[11px] text-gray-400">Группа & Истории</div>
+                        </div>
+                    </a>
+
+                    <a href="https://t.me" target="_blank" class="p-4 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-sky-400 transition-all flex items-center space-x-3 group">
+                        <i class="fa-brands fa-telegram text-2xl text-sky-400 group-hover:scale-110 transition-transform"></i>
+                        <div>
+                            <div class="font-semibold text-sm text-gray-200">Telegram</div>
+                            <div class="text-[11px] text-gray-400">Свежий контент</div>
+                        </div>
+                    </a>
+
+                    <a href="https://youtube.com" target="_blank" class="p-4 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-red-600 transition-all flex items-center space-x-3 group">
+                        <i class="fa-brands fa-youtube text-2xl text-red-600 group-hover:scale-110 transition-transform"></i>
+                        <div>
+                            <div class="font-semibold text-sm text-gray-200">YouTube</div>
+                            <div class="text-[11px] text-gray-400">Видео и озвучки</div>
+                        </div>
+                    </a>
+
+                    <a href="https://rutube.ru" target="_blank" class="p-4 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 hover:border-emerald-500 transition-all flex items-center space-x-3 group">
+                        <i class="fa-solid fa-play text-2xl text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                        <div>
+                            <div class="font-semibold text-sm text-gray-200">Rutube</div>
+                            <div class="text-[11px] text-gray-400">Канал проекта</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Submit Story Form Section -->
+    <section id="submit-story" class="py-16 bg-dark-800/40 border-t border-dark-700">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="horror-font text-4xl text-red-600 text-glow mb-2">Прислать свою историю или анекдот</h2>
+                <p class="text-gray-400 text-sm">Знаешь жуткую быличку или смешную страшилку? Поделись с нами, и она попадет на сайт!</p>
+            </div>
+
+            <form id="storyForm" class="bg-dark-900 border border-dark-700 p-6 sm:p-8 rounded-2xl space-y-6 shadow-xl">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs uppercase font-semibold text-gray-400 mb-2">Ваше Имя / Псевдоним</label>
+                        <input type="text" id="authorName" required placeholder="Некто из тьмы" 
+                               class="w-full bg-dark-800 border border-dark-600 rounded-xl px-4 py-3 text-sm text-gray-200 focus:border-red-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase font-semibold text-gray-400 mb-2">Категория</label>
+                        <select id="storyCategory" class="w-full bg-dark-800 border border-dark-600 rounded-xl px-4 py-3 text-sm text-gray-200 focus:border-red-600 focus:outline-none">
+                            <option value="Ужасы">Ужасы & Страшилка</option>
+                            <option value="Чёрный юмор">Чёрный анекдот</option>
+                            <option value="Реальный случай">Случай из жизни</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase font-semibold text-gray-400 mb-2">Заголовок истории</label>
+                    <input type="text" id="storyTitle" required placeholder="Например: Посылка с того света" 
+                           class="w-full bg-dark-800 border border-dark-600 rounded-xl px-4 py-3 text-sm text-gray-200 focus:border-red-600 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase font-semibold text-gray-400 mb-2">Текст истории или анекдота</label>
+                    <textarea id="storyContent" rows="5" required placeholder="Расскажите вашу историю во всех подробностях..." 
+                              class="w-full bg-dark-800 border border-dark-600 rounded-xl px-4 py-3 text-sm text-gray-200 focus:border-red-600 focus:outline-none"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-4 rounded-xl bg-blood-700 hover:bg-blood-600 text-white font-semibold transition-all shadow-lg flex items-center justify-center">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Отправить на модерацию
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Support / Donation Options -->
+    <section id="contact" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="horror-font text-4xl text-red-600 text-glow mb-2">Поддержать Тёмную Тропу</h2>
+        <p class="text-gray-400 text-sm max-w-2xl mx-auto mb-10">Твоя поддержка помогает нам регулярно выпускать новые озвучки, покупать качественное аудиооборудование и развивать проект!</p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="p-5 rounded-2xl bg-dark-800 border border-dark-700 hover:border-amber-500 transition-all flex flex-col items-center">
+                <i class="fa-solid fa-circle-dollar-to-slot text-3xl text-amber-500 mb-3"></i>
+                <span class="font-bold text-sm text-gray-200">VK Donut</span>
+                <span class="text-xs text-gray-400 mt-1">Подписка VK</span>
+            </div>
+            <div class="p-5 rounded-2xl bg-dark-800 border border-dark-700 hover:border-red-500 transition-all flex flex-col items-center">
+                <i class="fa-solid fa-bell text-3xl text-red-500 mb-3"></i>
+                <span class="font-bold text-sm text-gray-200">DonationAlerts</span>
+                <span class="text-xs text-gray-400 mt-1">Разовый донат</span>
+            </div>
+            <div class="p-5 rounded-2xl bg-dark-800 border border-dark-700 hover:border-purple-500 transition-all flex flex-col items-center">
+                <i class="fa-solid fa-credit-card text-3xl text-purple-500 mb-3"></i>
+                <span class="font-bold text-sm text-gray-200">ЮMoney</span>
+                <span class="text-xs text-gray-400 mt-1">Кошелек</span>
+            </div>
+            <div class="p-5 rounded-2xl bg-dark-800 border border-dark-700 hover:border-emerald-500 transition-all flex flex-col items-center">
+                <i class="fa-solid fa-qrcode text-3xl text-emerald-500 mb-3"></i>
+                <span class="font-bold text-sm text-gray-200">СБП</span>
+                <span class="text-xs text-gray-400 mt-1">Перевод по QR</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-900 border-t border-dark-700 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-skull text-red-600 text-2xl"></i>
+                <span class="horror-font text-xl text-red-600">ТЁМНАЯ ТРОПА</span>
+            </div>
+
+            <div class="text-xs text-gray-500 text-center md:text-left">
+                © 2026 Проект «Ужасы анекдоты Тёмная тропа». Все права защищены.<br>
+                По всем вопросам: <a href="mailto:dark.trail@mail.ru" class="text-red-400 hover:underline">dark.trail@mail.ru</a>
+            </div>
+
+            <div class="flex space-x-4 text-gray-400">
+                <a href="https://vk.com" target="_blank" class="hover:text-red-500"><i class="fa-brands fa-vk text-lg"></i></a>
+                <a href="https://t.me" target="_blank" class="hover:text-red-500"><i class="fa-brands fa-telegram text-lg"></i></a>
+                <a href="https://youtube.com" target="_blank" class="hover:text-red-500"><i class="fa-brands fa-youtube text-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Full Story Reader Modal Window -->
+    <div id="readerModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-dark-900 border border-blood-900/80 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden blood-glow">
+            <div class="p-6 border-b border-dark-700 flex justify-between items-center">
+                <div>
+                    <span id="modalCategory" class="text-xs uppercase font-bold text-red-500">Ужасы</span>
+                    <h3 id="modalTitle" class="text-2xl font-bold text-gray-100">Заголовок истории</h3>
+                </div>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div id="modalBody" class="p-6 overflow-y-auto text-gray-300 leading-relaxed space-y-4 text-base">
+                <!-- Dynamic Content -->
+            </div>
+            <div class="p-4 border-t border-dark-700 bg-dark-800/50 flex justify-between items-center text-xs text-gray-400">
+                <span id="modalAuthor"><i class="fa-solid fa-user mr-1"></i> Автор</span>
+                <span id="modalDate"><i class="fa-solid fa-calendar mr-1"></i> Дата</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-blood-800 text-white px-5 py-3 rounded-xl shadow-2xl hidden items-center space-x-3 z-50 border border-blood-600">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg">Успешно!</span>
+    </div>
+
+    <script>
+        // Sample Data Repository for Dark Trail Stories and Jokes
+        const initialStories = [
+            {
+                id: 1,
+                title: "Ночной попутчик на трассе",
+                category: "horror",
+                categoryLabel: "Ужасы & Крипи",
+                author: "Мрачный Сказитель",
+                date: "02 Октября 2026",
+                preview: "Трасса М-4 была пустынна. Ночь, туман, и лишь один голосующий у обочины в старом дождевике...",
+                content: `Трасса была совершенно пуста. На часы на панели приборов я старался не смотреть — глухая ночь. Туман клубился так густо, что фары выхватывали лишь пару метров асфальта вперед.\n\nВдруг в свете фар возникла фигура. Мужчина в длинном темном дождевике стоял у самой обочины и молча поднял руку. Я не планировал останавливаться, но ноги сами нажали на тормоз.\n\nОн сел на заднее сиденье. От него веяло ледяным холодом и запахом сырой земли. Всю дорогу он молчал, смотря прямо перед собой. Когда я повернул зеркало заднего вида, чтобы рассмотреть его лицо... в зеркале никого не было. А сзади послышался шепот: «Не смотри назад...»`,
+                readTime: "4 мин",
+                audioUrl: true
+            },
+            {
+                id: 2,
+                title: "Черный юмор в морге",
+                category: "jokes",
+                categoryLabel: "Чёрный юмор",
+                author: "Доктор Некро",
+                date: "04 Октября 2026",
+                preview: "Дежурство патологоанатома в пятницу 13-го не предвещало никаких сюрпризов...",
+                content: `— Доктор, а почему у вас в моргах всегда так тихо?\n— Понимаете, пациент скорее мертв, чем разговорчив.\n— А если оживет?\n— Ну, тогда переведем в терапию, пусть в очереди постоит, одумается!`,
+                readTime: "1 мин",
+                audioUrl: false
+            },
+            {
+                id: 3,
+                title: "Старая кукла на чердаке",
+                category: "horror",
+                categoryLabel: "Ужасы & Крипи",
+                author: "Елена Тень",
+                date: "01 Октября 2026",
+                preview: "Разбирая вещи умершей бабушки, мы нашли стеклянные глаза, которые следили за нами...",
+                content: `Чердак старого деревенского дома был завален пыльными коробками. Среди газет за 1980 год лежала фарфоровая кукла. Ее платьице истлело, но глаза... стеклянные синие глаза казались невероятно живыми.\n\nЯ положила её на стол и пошла пить чай. Через полчаса кукла лежала уже на кресле. Сначала мы думали, что это шутка брата. Пока ночью из угла комнаты не раздался тихий фарфоровый скрежет и детский смех.`,
+                readTime: "5 мин",
+                audioUrl: true
+            },
+            {
+                id: 4,
+                title: "Звонок с неизвестного номера",
+                category: "audio",
+                categoryLabel: "Аудиорассказ",
+                author: "Тёмная Тропа Prod.",
+                date: "28 Сентября 2026",
+                preview: "Каждую ночь в 03:15 на стационарный телефон поступал один и тот же звонок...",
+                content: `Аудиорассказ о мистическом звонке из прошлого. Включайте аудиоплеер выше для прослушивания полной версии с профессиональной озвучкой и фоновыми звуковыми эффектами!`,
+                readTime: "6 мин",
+                audioUrl: true
+            },
+            {
+                id: 5,
+                title: "Завещание графского замка",
+                category: "jokes",
+                categoryLabel: "Чёрный юмор",
+                author: "Анекдот-мастер",
+                date: "05 Октября 2026",
+                preview: "Наследники собрались в старом готическом замке для чтения завещания...",
+                content: `Нотариус открывает конверт и читает:\n«Я, находясь в здравом уме и твердой памяти, всю свою огромную денежную сумму потратил перед смертью сам. А вам, мои дорогие родственники, оставляю этот прекрасный скрежет зубовный!»`,
+                readTime: "1 мин",
+                audioUrl: false
+            }
+        ];
+
+        // Random Jokes List for Generator Button
+        const jokesList = [
+            "«— Дорогой, под кроватью кто-то есть! — Не переживай, мы с ним на полупопии уже поделили территорию...»",
+            "«Встречаются два призрака: — Ты от чего умер? — От страха! А ты? — От смеха, когда увидел, от чего ты умер!»",
+            "«— Ваша теща упала в колодец с кипящим варом! — О боже! Только не говорите, что вы выключили газ!»",
+            "«На кладбище ночью тихо. Но только до тех пор, пока не проснется ночная смена сторожей...»",
+            "«— Дедушка, а почему у тебя такие большие зубы? — Потому что стоматологи нынче дорогие, внучек...»"
+        ];
+
+        // State Management
+        let stories = [...initialStories];
+        let favorites = JSON.parse(localStorage.getItem('dark_trail_favs') || '[]');
+        let currentFilter = 'all';
+
+        // DOM Element Selectors
+        const cardsGrid = document.getElementById('cardsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const favCountSpan = document.getElementById('favCount');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        // Modal Elements
+        const readerModal = document.getElementById('readerModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalAuthor = document.getElementById('modalAuthor');
+        const modalDate = document.getElementById('modalDate');
+
+        // Render Cards Function
+        function renderCards() {
+            cardsGrid.innerHTML = '';
+            
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const filtered = stories.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchTerm) || 
+                                      item.content.toLowerCase().includes(searchTerm);
+                
+                if (currentFilter === 'all') return matchesSearch;
+                if (currentFilter === 'favs') return favorites.includes(item.id) && matchesSearch;
+                return item.category === currentFilter && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                cardsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-500">
+                        <i class="fa-solid fa-ghost text-4xl mb-3 text-red-900 animate-bounce"></i>
+                        <p class="text-base">В этой секции пока пусто или ничего не найдено...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(story => {
+                const isFav = favorites.includes(story.id);
+                const card = document.createElement('div');
+                card.className = "bg-dark-800 border border-dark-700 rounded-2xl p-6 flex flex-col justify-between hover:border-blood-700 transition-all hover:shadow-xl group";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[10px] uppercase font-bold tracking-widest px-2.5 py-1 rounded bg-dark-700 text-red-400 border border-dark-600">
+                                ${story.categoryLabel}
+                            </span>
+                            <button onclick="toggleFav(${story.id})" class="text-gray-500 hover:text-amber-400 transition-colors">
+                                <i class="fa-${isFav ? 'solid' : 'regular'} fa-star text-base ${isFav ? 'text-amber-400' : ''}"></i>
+                            </button>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-100 group-hover:text-red-500 transition-colors mb-2">${story.title}</h3>
+                        <p class="text-xs text-gray-400 line-clamp-3 mb-4 leading-relaxed">${story.preview}</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-dark-700/60 flex items-center justify-between text-xs text-gray-400">
+                        <div class="flex items-center space-x-2">
+                            <span><i class="fa-solid fa-clock text-red-500 mr-1"></i> ${story.readTime}</span>
+                        </div>
+                        <button onclick="openStory(${story.id})" class="text-red-400 hover:text-red-300 font-medium flex items-center group-hover:translate-x-1 transition-transform">
+                            Читать <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                cardsGrid.appendChild(card);
+            });
+
+            favCountSpan.textContent = favorites.length;
+        }
+
+        // Filter Logic
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-blood-800', 'text-white', 'border-blood-600');
+                    b.classList.add('bg-dark-800', 'text-gray-400');
+                });
+                btn.classList.remove('bg-dark-800', 'text-gray-400');
+                btn.classList.add('bg-blood-800', 'text-white', 'border-blood-600');
+                
+                currentFilter = btn.dataset.category;
+                renderCards();
+            });
+        });
+
+        // Search Input Listener
+        searchInput.addEventListener('input', renderCards);
+
+        // Favorite Toggle Function
+        window.toggleFav = function(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+                showToast("Удалено из избранного");
+            } else {
+                favorites.push(id);
+                showToast("Добавлено в избранное");
+            }
+            localStorage.setItem('dark_trail_favs', JSON.stringify(favorites));
+            renderCards();
+        }
+
+        // Open Full Story Modal
+        window.openStory = function(id) {
+            const story = stories.find(s => s.id === id);
+            if (!story) return;
+
+            modalCategory.textContent = story.categoryLabel;
+            modalTitle.textContent = story.title;
+            modalAuthor.innerHTML = `<i class="fa-solid fa-user mr-1 text-red-500"></i> ${story.author}`;
+            modalDate.innerHTML = `<i class="fa-solid fa-calendar mr-1 text-red-500"></i> ${story.date}`;
+            
+            modalBody.innerHTML = story.content.split('\n\n').map(p => `<p>${p}</p>`).join('');
+
+            readerModal.classList.remove('hidden');
+        }
+
+        closeModalBtn.addEventListener('click', () => readerModal.classList.add('hidden'));
+        readerModal.addEventListener('click', (e) => {
+            if (e.target === readerModal) readerModal.classList.add('hidden');
+        });
+
+        // Random Joke Button Generator
+        document.getElementById('nextJokeBtn').addEventListener('click', () => {
+            const jokeText = document.getElementById('dailyJokeText');
+            const randomJoke = jokesList[Math.floor(Math.random() * jokesList.length)];
+            jokeText.textContent = randomJoke;
+        });
+
+        // Audio Player Controls Simulation
+        let isPlaying = false;
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playerDiscIcon = document.getElementById('playerDiscIcon');
+
+        playPauseBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+                playerDiscIcon.classList.add('animate-spin');
+                showToast("Воспроизведение аудио");
+            } else {
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+                playerDiscIcon.classList.remove('animate-spin');
+            }
+        });
+
+        // Ambient Sound Synth Simulation (Web Audio API Rain/Wind Generator)
+        let ambientCtx = null;
+        let isAmbientOn = false;
+        const ambientToggle = document.getElementById('ambientToggle');
+        const ambientIcon = document.getElementById('ambientIcon');
+        const ambientStatus = document.getElementById('ambientStatus');
+
+        ambientToggle.addEventListener('click', () => {
+            isAmbientOn = !isAmbientOn;
+            if (isAmbientOn) {
+                ambientIcon.className = "fa-solid fa-volume-high text-red-500 animate-pulse";
+                ambientStatus.textContent = "Звук включен";
+                showToast("Включен фоновый эмбиент");
+            } else {
+                ambientIcon.className = "fa-solid fa-volume-xmark text-gray-400";
+                ambientStatus.textContent = "Фоновый гул";
+                showToast("Фоновый звук выключен");
+            }
+        });
+
+        // Submit Story Form Handling
+        const storyForm = document.getElementById('storyForm');
+        storyForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newStory = {
+                id: Date.now(),
+                title: document.getElementById('storyTitle').value,
+                category: document.getElementById('storyCategory').value === 'Ужасы' ? 'horror' : 'jokes',
+                categoryLabel: document.getElementById('storyCategory').value,
+                author: document.getElementById('authorName').value || 'Аноним',
+                date: "Только что",
+                preview: document.getElementById('storyContent').value.slice(0, 90) + "...",
+                content: document.getElementById('storyContent').value,
+                readTime: "2 мин",
+                audioUrl: false
+            };
+
+            stories.unshift(newStory);
+            renderCards();
+            storyForm.reset();
+            showToast("Ваша история отправлена!");
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Toast Helper
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        // Initial Initialization
+        renderCards();
+    </script>
+</body>
+</html>
